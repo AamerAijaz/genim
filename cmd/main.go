@@ -1,24 +1,50 @@
 package main
 
-import "github.com/AamerAijaz/genim"
+import (
+	"github.com/AamerAijaz/genim"
+	genimrl "github.com/AamerAijaz/genim/renderers/raylib"
+)
 
 func main() {
-	context := genim.
-		NewContext(genim.WithBoundingBox(100, 100))
+	genimrl.Init(800, 450, "genim")
+	defer genimrl.Close()
 
-	root := genim.
-		NewElement("Root").
-		SetLayoutConfig(
-			genim.NewLayoutConfig(genim.Size{Width: 100, Height: 100}, genim.Position{X: 0, Y: 0}),
-		).
-		SetColor(genim.Color{R: 255, G: 0, B: 255, A: 255})
+	context := genim.NewContext(
+		genim.ContextWithBoundingBox(100, 100),
+		genim.ContextWithColor(genim.White),
+	)
 
-	for {
+	for !genimrl.ShouldClose() {
+		w, h := genimrl.ScreenSize()
+		context.SetLayoutDimensions(w, h)
+
 		context.
-			AddElement(root).
-			AddRenderCommand(root.GenerateRenderCommand())
+			CreateRoot("root").
+			AddElement(
+				genim.NewElement(
+					"box1",
+					genim.ElementWithColor(genim.Red),
+					genim.ElementWithLayoutConfig(
+						genim.NewLayoutConfig(
+							genim.Size{Width: 100, Height: 100},
+							genim.Position{X: 10, Y: 10},
+						),
+					),
+				),
+			).
+			AddElement(
+				genim.NewElement(
+					"box2",
+					genim.ElementWithColor(genim.Blue),
+					genim.ElementWithLayoutConfig(
+						genim.NewLayoutConfig(
+							genim.Size{Width: 100, Height: 100},
+							genim.Position{X: 120, Y: 10},
+						),
+					),
+				),
+			)
 
-		renderCommands := context.EndLayout()
-		genim.Draw(renderCommands)
+		genimrl.Draw(context.EndLayout())
 	}
 }

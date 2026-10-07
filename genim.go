@@ -1,10 +1,10 @@
 package genim
 
 type RenderCommand struct {
-	id          ElementId
-	boundingBox BoundingBox
-	color       Color
-	position    Position
+	ID          ElementId
+	BoundingBox BoundingBox
+	Color       Color
+	Position    Position
 }
 
 type Element struct {
@@ -13,13 +13,13 @@ type Element struct {
 	layoutConfig LayoutConfig
 }
 
-func WithLayoutConfig(layoutConfig LayoutConfig) func(*Element) {
+func ElementWithLayoutConfig(layoutConfig LayoutConfig) func(*Element) {
 	return func(e *Element) {
 		e.layoutConfig = layoutConfig
 	}
 }
 
-func WithColor(color Color) func(*Element) {
+func ElementWithColor(color Color) func(*Element) {
 	return func(e *Element) {
 		e.color = color
 	}
@@ -55,9 +55,9 @@ func (e *Element) SetColor(color Color) *Element {
 
 func (e *Element) GenerateRenderCommand() RenderCommand {
 	return RenderCommand{
-		id:          e.id,
-		color:       e.color,
-		boundingBox: BoundingBox(e.layoutConfig.size),
-		position:    e.layoutConfig.position,
+		ID:          e.id,
+		Color:       e.color,
+		BoundingBox: BoundingBox(e.layoutConfig.size),
+		Position:    e.layoutConfig.position,
 	}
 }
