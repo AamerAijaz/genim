@@ -1,18 +1,26 @@
 package genim
 
+type LayoutDirection string
+
+const (
+	TopToBottom LayoutDirection = "Top_To_Bottom"
+	LeftToRight LayoutDirection = "Left_To_Right"
+)
+
 type LayoutConfig struct {
-	size     Size
-	position Position
+	size      Size
+	position  Position
+	direction LayoutDirection
 }
 
-var defaultLayoutConfig = LayoutConfig{
-	size:     Size{Width: 0, Height: 0},
-	position: Position{X: -1, Y: -1},
-}
-
-func NewLayoutConfig(size Size, position Position) LayoutConfig {
+func NewLayoutConfig(size Size, direction LayoutDirection) LayoutConfig {
 	return LayoutConfig{
-		size:     size,
-		position: position,
+		size:      size,
+		direction: direction,
 	}
+}
+
+func (l LayoutConfig) SetPosition(position Position) LayoutConfig {
+	l.position = position
+	return l
 }
